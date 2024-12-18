@@ -1,0 +1,101 @@
+/* Estilo Geral */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Container principal */
+#app-screen {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    height: 500px; /* Altura fixa */
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    overflow: hidden; /* Garante que o conteúdo não transborde */
+}
+
+h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Lista de Motoboys */
+#user-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+    height: 350px; /* Altura fixa para a lista */
+    overflow-y: auto; /* Barra de rolagem */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+#user-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 5px;
+    background: #f9f9f9; /* Fundo padrão */
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+#user-list li:nth-child(-n+6) {
+    background: #ffcccc; /* Vermelho claro para os 6 primeiros */
+    color: #b30000; /* Texto vermelho escuro */
+}
+
+#user-list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Botões na Lista */
+.list-btn {
+    padding: 6px 10px;
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.list-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    #user-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .list-btn {
+        width: 100%;
+        margin-top: 8px;
+    }
+}
