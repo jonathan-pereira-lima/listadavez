@@ -38,15 +38,6 @@ function loadAppScreen() {
 
 // Função para adicionar o nome do usuário à lista
 function addUser() {
-    const now = new Date();
-    const currentHour = now.getHours();
-
-    // Permitir adicionar nomes apenas ante das 7h ou após as 12h
-    if (currentHour >= 7 && currentHour < 12) {
-        alert("lista bloqueada até as 12hs");
-        return;
-    }
-
     const loggedInUser = localStorage.getItem('loggedInUser');
     let userList = JSON.parse(localStorage.getItem('userList')) || [];
 
@@ -60,10 +51,9 @@ function addUser() {
     }
 }
 
-
 // Função para remover o nome do usuário da lista
-function removeUser() {
-    const loggedInUser = localStorage.getItem('loggedInUser');
+function removeUser(userName) {
+    const loggedInUser = userName || localStorage.getItem('loggedInUser');
     let userList = JSON.parse(localStorage.getItem('userList')) || [];
 
     // Verifica se o usuário está na lista
@@ -74,16 +64,18 @@ function removeUser() {
             userList = userList.filter(user => user.name !== loggedInUser);
             localStorage.setItem('userList', JSON.stringify(userList));
             renderUserList();
-        } 
+            alert("Seu nome foi removido com sucesso.");
+        } else {
+            alert("Remoção cancelada.");
+        }
     } else {
         alert("Seu nome não está na lista.");
     }
 }
 
-
 // Função para mover o nome do usuário para o final da lista (Abaixar Nome)
-function moveToEnd() {
-    const loggedInUser = localStorage.getItem('loggedInUser');
+function moveToEnd(userName) {
+    const loggedInUser = userName || localStorage.getItem('loggedInUser');
     let userList = JSON.parse(localStorage.getItem('userList')) || [];
 
     if (userList.some(user => user.name === loggedInUser)) {
@@ -97,15 +89,19 @@ function moveToEnd() {
     }
 }
 
-// Função para renderizar a lista de motoboys
 function renderUserList() {
     const userList = JSON.parse(localStorage.getItem('userList')) || [];
     const userListElement = document.getElementById('user-list');
     userListElement.innerHTML = '';
 
     const now = Date.now();
+    const loggedInUser = localStorage.getItem('loggedInUser'); // Recuperar o usuário logado
+
     const updatedUserList = userList.map((user, index) => {
         const li = document.createElement('li');
+        li.style.display = 'flex'; // Para alinhar o texto e os botões na mesma linha
+        li.style.alignItems = 'center';
+        li.style.justifyContent = 'space-between';
 
         // Para os 6 primeiros, exibir o temporizador
         if (index < 6) {
@@ -129,6 +125,31 @@ function renderUserList() {
             li.textContent = `${index + 1}. ${user.name}`;
         }
 
+        // Adicionar botões somente para o usuário logado
+        if (user.name === loggedInUser) {
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.style.display = 'flex';
+            buttonsContainer.style.gap = '10px';
+
+            const moveButton = document.createElement('button');
+            moveButton.textContent = '↓';
+            moveButton.className = 'move'; // Classe para estilo azul
+            moveButton.onclick = () => moveToEnd(user.name);
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = '−';
+            removeButton.className = 'remove'; // Classe para estilo vermelho
+            removeButton.onclick = () => {
+                if (confirm('Deseja realmente remover seu nome da lista?')) {
+                    removeUser(user.name);
+                }
+            };
+
+            buttonsContainer.appendChild(moveButton);
+            buttonsContainer.appendChild(removeButton);
+            li.appendChild(buttonsContainer);
+        }
+
         userListElement.appendChild(li);
         return user;
     });
@@ -139,6 +160,8 @@ function renderUserList() {
     // Verificação para remoção de nomes com tempo expirado
     removeExpiredUsers(updatedUserList);
 }
+
+
 
 // Função para remover usuários com tempo expirado
 function removeExpiredUsers(userList) {
@@ -164,3 +187,30 @@ setInterval(() => {
     const userList = JSON.parse(localStorage.getItem('userList')) || [];
     renderUserList();
 }, 1000);
+
+// Função para bloquear adições fora do horário permitido
+function isAddUserAllowed() {
+    const now = new Date();
+    const hours = now.getHours();
+    return (hours < 7 || hours >= 12);
+}
+
+// Modifique a função addUser para verificar o horário permitido
+function addUser() {
+    if (!isAddUserAllowed()) {
+        alert("Adições só são permitidas antes das 7h e após as 12h.");
+        return;
+    }
+
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    let userList = JSON.parse(localStorage.getItem('userList')) || [];
+
+    // Verificar se o nome já está na lista
+    if (!userList.some(user => user.name === loggedInUser)) {
+        userList.push({ name: loggedInUser, timeLimit: null });
+        localStorage.setItem('userList', JSON.stringify(userList));
+        renderUserList();
+    } else {
+        alert("Seu nome já está na lista.");
+    }
+}
