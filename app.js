@@ -64,10 +64,7 @@ function removeUser(userName) {
             userList = userList.filter(user => user.name !== loggedInUser);
             localStorage.setItem('userList', JSON.stringify(userList));
             renderUserList();
-            alert("Seu nome foi removido com sucesso.");
-        } else {
-            alert("Remoção cancelada.");
-        }
+        } 
     } else {
         alert("Seu nome não está na lista.");
     }
