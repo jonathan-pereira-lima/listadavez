@@ -38,6 +38,15 @@ function loadAppScreen() {
 
 // Função para adicionar o nome do usuário à lista
 function addUser() {
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    // Permitir adicionar nomes apenas ante das 7h ou após as 12h
+    if (currentHour >= 7 && currentHour < 12) {
+        alert("lista bloqueada até as 12hs");
+        return;
+    }
+
     const loggedInUser = localStorage.getItem('loggedInUser');
     let userList = JSON.parse(localStorage.getItem('userList')) || [];
 
@@ -51,15 +60,26 @@ function addUser() {
     }
 }
 
+
 // Função para remover o nome do usuário da lista
 function removeUser() {
     const loggedInUser = localStorage.getItem('loggedInUser');
     let userList = JSON.parse(localStorage.getItem('userList')) || [];
 
-    userList = userList.filter(user => user.name !== loggedInUser);
-    localStorage.setItem('userList', JSON.stringify(userList));
-    renderUserList();
+    // Verifica se o usuário está na lista
+    if (userList.some(user => user.name === loggedInUser)) {
+        // Exibe um popup de confirmação
+        const confirmRemoval = confirm("Você tem certeza que deseja remover seu nome da lista?");
+        if (confirmRemoval) {
+            userList = userList.filter(user => user.name !== loggedInUser);
+            localStorage.setItem('userList', JSON.stringify(userList));
+            renderUserList();
+        } 
+    } else {
+        alert("Seu nome não está na lista.");
+    }
 }
+
 
 // Função para mover o nome do usuário para o final da lista (Abaixar Nome)
 function moveToEnd() {
