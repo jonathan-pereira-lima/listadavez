@@ -132,7 +132,7 @@ function renderUserList() {
 
         // Mostrar o contador de movimentos ao lado do nome
         const moveCountSpan = document.createElement('span');
-        moveCountSpan.textContent = `(${user.moveCount} movimentos)`;
+        moveCountSpan.textContent = `(baixou ${user.moveCount} vez)`;
         li.appendChild(moveCountSpan);
 
         // Adicionar botões somente para o usuário logado
