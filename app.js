@@ -1,6 +1,10 @@
 // Função para manipular login e criação de conta
 function handleLogin() {
-    const username = document.getElementById('username').value;
+    let username = document.getElementById('username').value;
+
+    // Remover espaços em branco no início e no fim e eliminar todos os espaços dentro do nome
+    username = username.trim().toLowerCase().replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
     if (username && !localStorage.getItem(username)) {
         alert("Usuário não encontrado. Crie uma conta.");
     } else if (username) {
@@ -12,17 +16,23 @@ function handleLogin() {
 }
 
 function handleCreateAccount() {
-    const username = document.getElementById('username').value;
-    if (username) {
-        if (localStorage.getItem(username)) {
-            alert("Usuário já existe. Faça login.");
-        } else {
-            localStorage.setItem(username, JSON.stringify([]));
-            localStorage.setItem('loggedInUser', username);
-            loadAppScreen();
-        }
+    let username = document.getElementById('username').value;
+
+    // Remover espaços em branco no início e no fim e eliminar todos os espaços dentro do nome
+    username = username.trim().toLowerCase().replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    // Validar tamanho, ausência de espaços e nome composto
+    if (username === "" || username.length > 10 || username.includes(" ") || username.split(" ").length > 1) {
+        alert("Nome de usuário inválido. Use até 10 caracteres, sem espaços ou nomes compostos.");
+        return;
+    }
+
+    if (localStorage.getItem(username)) {
+        alert("Usuário já existe. Faça login.");
     } else {
-        alert("Por favor, insira um nome de usuário.");
+        localStorage.setItem(username, JSON.stringify([]));
+        localStorage.setItem('loggedInUser', username);
+        loadAppScreen();
     }
 }
 
@@ -162,9 +172,6 @@ function renderUserList() {
         addUserButton.style.display = 'inline-block';
     }
 }
-
-
-
 
 // Função para remover usuários com tempo expirado
 function removeExpiredUsers(userList) {
