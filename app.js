@@ -89,6 +89,7 @@ function moveToEnd(userName) {
 function renderUserList() {
     const userList = JSON.parse(localStorage.getItem('userList')) || [];
     const userListElement = document.getElementById('user-list');
+    const addUserButton = document.getElementById('add-user-button'); // Supondo que o botão tenha este ID
     userListElement.innerHTML = '';
 
     const now = Date.now();
@@ -136,11 +137,7 @@ function renderUserList() {
             const removeButton = document.createElement('button');
             removeButton.textContent = '−';
             removeButton.className = 'remove'; // Classe para estilo vermelho
-            removeButton.onclick = () => {
-                if (confirm('Deseja realmente remover seu nome da lista?')) {
-                    removeUser(user.name);
-                }
-            };
+            removeButton.onclick = () => removeUser(user.name);
 
             buttonsContainer.appendChild(moveButton);
             buttonsContainer.appendChild(removeButton);
@@ -156,7 +153,16 @@ function renderUserList() {
 
     // Verificação para remoção de nomes com tempo expirado
     removeExpiredUsers(updatedUserList);
+
+    // Ocultar o botão de adicionar se o nome do usuário já estiver na lista
+    const isUserInList = userList.some(user => user.name === loggedInUser);
+    if (isUserInList) {
+        addUserButton.style.display = 'none';
+    } else {
+        addUserButton.style.display = 'inline-block';
+    }
 }
+
 
 
 
