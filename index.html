@@ -8,11 +8,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>Lista da Vez UBIS</h1>
+        
 
         <!-- Tela de Login -->
         <div id="login-screen">
-            <h2>Login ou Cadastro</h2>
+
+              <!-- Imagem do usuário -->
+              <div style="text-align: center; margin-bottom: 10px;">
+                <img src="images/logo.jpeg" alt="User Icon" style="width: 125px; height: 125px; border-radius: 50%;">
+            </div>
+
+
+            <label for="chk" aria-hidden="true">Login User</label>
+            
             <input type="text" id="username" placeholder="Nome de usuário" required>
             <button id="login-button" onclick="handleLogin()">Entrar</button>
             <button id="create-account-button" onclick="handleCreateAccount()">Criar Conta</button>
